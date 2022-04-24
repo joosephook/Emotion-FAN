@@ -6,11 +6,13 @@ import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 from basic_code import load, util, networks
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+logger = util.Logger('./log/', 'fan_afew')
+
 def main():
     parser = argparse.ArgumentParser(description='PyTorch Frame Attention Network Training')
-    parser.add_argument('--at_type', '--attention', default=1, type=int, metavar='N',
+    parser.add_argument('--at_type', '--attention', default=0, type=int, metavar='N',
                         help= '0 is self-attention; 1 is self + relation-attention')
-    parser.add_argument('--epochs', default=180, type=int, metavar='N',
+    parser.add_argument('--epochs', default=30, type=int, metavar='N',
                         help='number of total epochs to run')
     parser.add_argument('--lr', '--learning-rate', default=4e-3, type=float,
                         metavar='LR', help='initial learning rate')
@@ -19,15 +21,14 @@ def main():
     args = parser.parse_args()
     best_acc = 0
     at_type = ['self-attention', 'self_relation-attention'][args.at_type]
-    logger = util.Logger('./log/','fan_afew')
     logger.print('The attention method is {:}, learning rate: {:}'.format(at_type, args.lr))
     
     ''' Load data '''
-    root_train = './data/face/train_afew'
-    list_train = './data/txt/afew_train.txt'
+    root_train = './data/face'
+    list_train = 'list.txt'
     batchsize_train= 48
-    root_eval = './data/face/val_afew'
-    list_eval = './data/txt/afew_eval.txt'
+    root_eval = './data/face'
+    list_eval = 'list.txt'
     batchsize_eval= 64
     train_loader, val_loader = load.afew_faces_fan(root_train, list_train, batchsize_train, root_eval, list_eval, batchsize_eval)
     ''' Load model '''
