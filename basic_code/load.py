@@ -9,7 +9,12 @@ cate2label = {'CK+':{0: 'Happy', 1: 'Angry', 2: 'Disgust', 3: 'Fear', 4: 'Sad', 
                      'Angry': 1,'Disgust': 2,'Fear': 3,'Happy': 0,'Contempt': 5,'Sad': 4,'Surprise': 6},
 
               'AFEW':{0: 'Happy',1: 'Angry',2: 'Disgust',3: 'Fear',4: 'Sad',5: 'Neutral',6: 'Surprise',
-                  'Angry': 1,'Disgust': 2,'Fear': 3,'Happy': 0,'Neutral': 5,'Sad': 4,'Surprise': 6}}
+                  'Angry': 1,'Disgust': 2,'Fear': 3,'Happy': 0,'Neutral': 5,'Sad': 4,'Surprise': 6},
+
+              'EMO': {
+                  0: 'Disgust', 1: 'Surprise', 2: 'Sadness', 3: 'Anger', 4: 'Fear', 5: 'Neutral', 6: 'Happy',
+                  'Disgust': 0, 'Surprise': 1, 'Sadness': 2, 'Anger': 3, 'Fear': 4, 'Neutral': 5, 'Happy': 6}
+              }
 
 def ckplus_faces_baseline(video_root, video_list, fold, batchsize_train, batchsize_eval):
     train_dataset = data_generator.TenFold_VideoDataset(
@@ -65,14 +70,14 @@ def afew_faces_baseline(root_train, list_train, batchsize_train, root_eval, list
     train_dataset = data_generator.VideoDataset(
         video_root=root_train,
         video_list=list_train,
-        rectify_label=cate2label['AFEW'],
+        rectify_label=cate2label['EMO'],
         transform=transforms.Compose([transforms.Resize(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()]),
     )
 
     val_dataset = data_generator.VideoDataset(
         video_root=root_eval,
         video_list=list_eval,
-        rectify_label=cate2label['AFEW'],
+        rectify_label=cate2label['EMO'],
         transform=transforms.Compose([transforms.Resize(224), transforms.ToTensor()]),
         csv=False)
 
@@ -92,14 +97,14 @@ def afew_faces_fan(root_train, list_train, batchsize_train, root_eval, list_eval
     train_dataset = data_generator.TripleImageDataset(
         video_root=root_train,
         video_list=list_train,
-        rectify_label=cate2label['AFEW'],
+        rectify_label=cate2label['EMO'],
         transform=transforms.Compose([transforms.Resize(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()]),
     )
 
     val_dataset = data_generator.VideoDataset(
         video_root=root_eval,
         video_list=list_eval,
-        rectify_label=cate2label['AFEW'],
+        rectify_label=cate2label['EMO'],
         transform=transforms.Compose([transforms.Resize(224), transforms.ToTensor()]),
         csv=False)
 
