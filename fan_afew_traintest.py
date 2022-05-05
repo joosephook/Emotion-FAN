@@ -25,10 +25,10 @@ def main():
     
     ''' Load data '''
     root_train = './data/face'
-    list_train = 'list.txt'
+    list_train = 'train.txt'
     batchsize_train= 48
     root_eval = './data/face'
-    list_eval = 'list.txt'
+    list_eval = 'eval.txt'
     batchsize_eval= 64
     train_loader, val_loader = load.afew_faces_fan(root_train, list_train, batchsize_train, root_eval, list_eval, batchsize_eval)
     ''' Load model '''
@@ -79,6 +79,9 @@ def train(train_loader, model, optimizer, epoch):
         # compute output
         ''' model & full_model'''
         pred_score = model(input_var)
+        # logit = pred_score.detach().cpu()
+        # print(logit)
+        # print(F.softmax(logit, dim=1))
         loss = F.cross_entropy(pred_score, target_var)
         loss = loss.sum()
         #
@@ -125,6 +128,7 @@ def val(val_loader, model, at_type):
     output_alpha    = []
     target_store = []
     index_vector = []
+    #TODO: https://christianbernecker.medium.com/how-to-create-a-confusion-matrix-with-tensorboard-and-pytorch-3344ad5e7209
     with torch.no_grad():
         for i, (input_var, target, index) in enumerate(val_loader):
             # compute output
