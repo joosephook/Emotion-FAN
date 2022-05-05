@@ -12,13 +12,21 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch Frame Attention Network Training')
     parser.add_argument('--at_type', '--attention', default=0, type=int, metavar='N',
                         help= '0 is self-attention; 1 is self + relation-attention')
-    parser.add_argument('--epochs', default=30, type=int, metavar='N',
+    parser.add_argument('--epochs', default=100, type=int, metavar='N',
                         help='number of total epochs to run')
     parser.add_argument('--lr', '--learning-rate', default=4e-3, type=float,
                         metavar='LR', help='initial learning rate')
     parser.add_argument('-e', '--evaluate', default=False, dest='evaluate', action='store_true',
                         help='evaluate model on validation set')
+    parser.add_argument('--seed', default=123456, type=int, help='random seed')
     args = parser.parse_args()
+
+    import random
+    import numpy as np
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.random.manual_seed(args.seed)
+
     best_acc = 0
     at_type = ['self-attention', 'self_relation-attention'][args.at_type]
     logger.print('The attention method is {:}, learning rate: {:}'.format(at_type, args.lr))
